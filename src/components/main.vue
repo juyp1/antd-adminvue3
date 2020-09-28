@@ -1,104 +1,107 @@
 <template>
-  <a-layout style="min-height: 100vh">
-    <a-layout-sider>
-      <div class="logo">
-        <img src="../assets/logo.png"
-             alt="">
+<a-layout style="min-height: 100vh">
+  <a-layout-sider>
+    <div class="logo">
+      <img src="../assets/logo.png" alt="">
+    </div>
+    <Menus :routers="routers" :nowpath="state.nownav" @menuclick="handleitem" />
+  </a-layout-sider>
+  <a-layout>
+    <a-layout-header style="background: #fff; padding: 0">
+      <a-row>
+        <a-col :span="21">
+          <div style="padding-left:20px;padding-top:20px">
+            <a-breadcrumb>
+              <a-breadcrumb-item>{{state.nownav.ptitle}}</a-breadcrumb-item>
+              <a-breadcrumb-item v-if="state.nownav.title!='首页'">
+                {{state.nownav.title}}
+              </a-breadcrumb-item>
+              <a-breadcrumb-item v-if="state.nownav.ctitle!=''">{{state.nownav.ctitle}}</a-breadcrumb-item>
+            </a-breadcrumb>
+
+          </div>
+        </a-col>
+        <a-col :span="3">
+          <a-dropdown-button>
+            欢迎你-admin
+            <template v-slot:overlay>
+              <a-menu @click="handleMenuClick">
+                <a-menu-item key="1">
+                  <icon-font type="icon-xiugaimima" />修改密码
+                </a-menu-item>
+                <a-menu-item key="2" @click="loginOut">
+                  <icon-font type="icon-tuichu" />退出登录
+                </a-menu-item>
+              </a-menu>
+            </template>
+            <template v-slot:icon>
+              <UserOutlined />
+            </template>
+          </a-dropdown-button>
+        </a-col>
+      </a-row>
+    </a-layout-header>
+    <a-layout-content style="margin: 15px 16px">
+      <div class="tags-nav">
+        <template v-for="(item,index) in state.navlists">
+          <span>
+
+            <Tags :tageName="item.ctitle!==''?item.ctitle: item.title" @close="handleclose" @mouseover.stop="touchstart" @click.stop="handlechange(item)" @contextmenu.prevent="rightClick(item)" :color="state.nownav.path===item.path?'#2db7f5':''" :index="index" />
+          </span>
+          <div v-if="state.activated" v-bind:style="{  position: 'absolute', zIndex: '99999',left: `${state.clientX-60}px`,top:`${state.clientY-10}px`}">
+            <ul style="list-style: none;">
+              <li>
+                <a-button style="min-width:100px;border:0px !important" type="default" @click="rightclose"> 关闭所有 </a-button>
+              </li>
+              <li>
+                <a-button style="min-width:100px;border:0px !important" type="default" @click="otherclose()"> 关闭其它 </a-button>
+              </li>
+            </ul>
+          </div>
+        </template>
       </div>
-      <Menus :routers="routers"
-             :nowpath="state.nownav"
-             @menuclick="handleitem" />
-    </a-layout-sider>
-    <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
-        <a-row>
-          <a-col :span="21">
-            <div style="padding-left:20px;padding-top:20px">
-              <a-breadcrumb>
-                <a-breadcrumb-item>{{state.nownav.ptitle}}</a-breadcrumb-item>
-                <a-breadcrumb-item v-if="state.nownav.title!='首页'">
-                  {{state.nownav.title}}
-                </a-breadcrumb-item>
-                <a-breadcrumb-item v-if="state.nownav.ctitle!=''">{{state.nownav.ctitle}}</a-breadcrumb-item>
-              </a-breadcrumb>
 
-            </div>
-          </a-col>
-          <a-col :span="3">
-            <a-dropdown-button>
-              欢迎你-admin
-              <template v-slot:overlay>
-                <a-menu @click="handleMenuClick">
-                  <a-menu-item key="1">
-                    <icon-font type="icon-xiugaimima" />修改密码
-                  </a-menu-item>
-                  <a-menu-item key="2"
-                               @click="loginOut">
-                    <icon-font type="icon-tuichu" />退出登录
-                  </a-menu-item>
-                </a-menu>
-              </template>
-              <template v-slot:icon>
-                <UserOutlined />
-              </template>
-            </a-dropdown-button>
-          </a-col>
-        </a-row>
-      </a-layout-header>
-      <a-layout-content style="margin: 15px 16px">
-        <div class="tags-nav">
-          <template v-for="(item,index) in state.navlists">
-            <span>
+      <div class="content-wrapper container" @click="righthide">
 
-              <Tags :tageName="item.ctitle!==''?item.ctitle: item.title"
-                    @close="handleclose"
-                    @mouseover.stop="touchstart"
-                    @click.stop="handlechange(item)"
-                    @contextmenu.prevent="rightClick(item)"
-                    :color="state.nownav.path===item.path?'#2db7f5':''"
-                    :index="index" />
-            </span>
-          </template>
-        </div>
-        <div v-if="state.activated"
-             v-bind:style="{  position: 'absolute', zIndex: '99999',left: `${state.clientX-60}px`,top:`${state.clientY-10}px`}">
-          <ul style="list-style: none;">
-            <li>
-              <a-button style="min-width:100px;border:0px !important"
-                        type="default"
-                        @click="rightclose"> 关闭所有 </a-button>
-            </li>
-            <li>
-              <a-button style="min-width:100px;border:0px !important"
-                        type="default"> 关闭其它 </a-button>
-            </li>
-          </ul>
-        </div>
-
-        <div class="content-wrapper container"
-             @click="righthide">
-
-          <keep-alive :include="cacheList">
-            <router-view />
-          </keep-alive>
-        </div>
-      </a-layout-content>
-
-    </a-layout>
+        <keep-alive :include="cacheList">
+          <router-view />
+        </keep-alive>
+      </div>
+    </a-layout-content>
 
   </a-layout>
 
+</a-layout>
 </template>
+
 <script>
 import _ from 'lodash'
 import config from '../config/index'
 import VueContextMenu from '@xunlei/vue-context-menu'
-import { ref, onMounted, computed, reactive } from "vue";
-import { useRouter, createRouter, createWebHistory } from 'vue-router';
+import {
+  ref,
+  onMounted,
+  computed,
+  reactive
+} from "vue";
+import {
+  useRouter,
+  createRouter,
+  createWebHistory
+} from 'vue-router';
 import _routers from '@/router/'
 import Tags from './tags'
-import { createFromIconfontCN, UserOutlined, MessageFilled } from '@ant-design/icons-vue';
-import { setToken, getToken, canTurnTo, setTitle } from '@/libs/util'
+import {
+  createFromIconfontCN,
+  UserOutlined,
+  MessageFilled
+} from '@ant-design/icons-vue';
+import {
+  setToken,
+  getToken,
+  canTurnTo,
+  setTitle
+} from '@/libs/util'
 import Menus from './menu'
 const IconFont = createFromIconfontCN({
   scriptUrl: config.baseUrl.iconfont,
@@ -112,18 +115,29 @@ export default {
     MessageFilled,
     Menus
   },
-  setup () {
+  setup() {
     const state = reactive({
       clientX: '',
       clientY: '',
       activated: false,
       nownav: {},
       navlists: [],
-      menurouter: []
+      menurouter: [],
+      selectrightpath: ''
     })
-    state.navlists = [{ path: '/home', title: '首页', ptitle: '首页', ctitle: '' }]
+    state.navlists = [{
+      path: '/home',
+      title: '首页',
+      ptitle: '首页',
+      ctitle: ''
+    }]
     const routers = ref([])
-    let arr = [{ path: '/home', title: '首页', ptitle: '首页', ctitle: '' }]
+    let arr = [{
+      path: '/home',
+      title: '首页',
+      ptitle: '首页',
+      ctitle: ''
+    }]
     let cacheList = computed(() => {
       const list = ['ParentView']
       return list
@@ -133,7 +147,12 @@ export default {
       if (localStorage.getItem('nowvalue') != null) {
         state.nownav = JSON.parse(localStorage.getItem('nowvalue'))
       } else {
-        state.nownav = { path: '/home', title: '首页', ptitle: '首页', ctitle: '', }
+        state.nownav = {
+          path: '/home',
+          title: '首页',
+          ptitle: '首页',
+          ctitle: '',
+        }
       }
       if (localStorage.getItem('navs') != null || localStorage.getItem('navs') != undefined) {
         state.navlists = JSON.parse(localStorage.getItem('navs'))
@@ -169,11 +188,19 @@ export default {
     const handleitem = (item, submitem, csubmitem) => {
       state.activated = false
       let params = {
-        path: `${item.path}/${submitem.path}${csubmitem != undefined ? '/' + csubmitem.path : ''}`, title: submitem.meta.title, ptitle: item.meta.title, ctitle: csubmitem != undefined ? csubmitem.meta.title : '',
+        path: `${item.path}/${submitem.path}${csubmitem != undefined ? '/' + csubmitem.path : ''}`,
+        title: submitem.meta.title,
+        ptitle: item.meta.title,
+        ctitle: csubmitem != undefined ? csubmitem.meta.title : '',
         selectedKeys: [csubmitem != undefined ? csubmitem.path : submitem.path],
         openKeys: [item.path]
       }
-      let arr = [{ path: '/home', title: '首页', ptitle: '首页', ctitle: '' }]
+      let arr = [{
+        path: '/home',
+        title: '首页',
+        ptitle: '首页',
+        ctitle: ''
+      }]
       if (localStorage.getItem('navs') != null || localStorage.getItem('navs') != undefined) {
         arr = JSON.parse(localStorage.getItem('navs'));
         // 去重
@@ -222,6 +249,7 @@ export default {
     }
     const rightClick = (e) => {
       if (e.title !== '首页') {
+        state.selectrightpath = e;
         state.activated = true
       }
     }
@@ -247,6 +275,28 @@ export default {
       }
       localStorage.setItem('navs', JSON.stringify(arr))
     }
+    // 除了首页、和当前选择的不清空外其它的都删除
+    const otherclose = () => {
+      let arr = state.navlists
+      for (var i = 0; i < arr.length;) {
+        if (arr[i].title !== '首页') {
+          if (state.selectrightpath.path === arr[i].path) {
+            i++
+          } else {
+            arr.splice(i, 1)
+          }
+
+        } else {
+          i++
+        }
+      }
+      // 赋值为当前
+      state.nownav = state.selectrightpath
+      state.activated = false
+      localStorage.setItem('navs', JSON.stringify(arr))
+      _routers.push(state.selectrightpath.path)
+
+    }
     // 登出
     const loginOut = () => {
       setToken('')
@@ -266,7 +316,8 @@ export default {
       handlechange,
       rightclose,
       righthide,
-      loginOut
+      loginOut,
+      otherclose
     }
   }
 };
@@ -278,19 +329,23 @@ export default {
   height: calc(100% - 80px);
   // overflow: auto;
 }
+
 .logo img {
   padding: 10px;
   width: 100%;
 }
+
 .container {
   background: #ffffff;
   // height: 100%;
 }
+
 .tags-nav {
   padding-top: 3px;
   height: 38px;
   -webkit-box-shadow: 0 0 3px 2px hsla(0, 0%, 39.2%, 0.1) inset;
   box-shadow: inset 0 0 3px 2px hsla(0, 0%, 39.2%, 0.1);
+
   .ant-tags {
     box-sizing: border-box;
     color: rgba(0, 0, 0, 0.65);
@@ -319,13 +374,16 @@ export default {
     cursor: pointer;
   }
 }
+
 .ant-dropdown-link {
   cursor: pointer;
 }
+
 .icons-list ::v-deep(.anticon) {
   margin-right: 6px;
   font-size: 24px;
 }
+
 .right-menu {
   position: fixed;
   background: #fff;
@@ -334,6 +392,7 @@ export default {
   z-index: 999;
   display: none;
 }
+
 .right-menu a {
   width: 75px;
   height: 28px;
@@ -342,21 +401,26 @@ export default {
   display: block;
   color: #1a1a1a;
 }
+
 .right-menu a:hover {
   background: #eee;
   color: #fff;
 }
+
 .right-menu {
   border: 1px solid #eee;
   box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, 0.1);
   border-radius: 1px;
 }
+
 a {
   text-decoration: none;
 }
+
 .right-menu a {
   padding: 2px;
 }
+
 .right-menu a:hover {
   background: #42b983;
 }
