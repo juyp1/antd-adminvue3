@@ -1,0 +1,32 @@
+{
+  "name": "vue3demo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@ant-design/icons-vue": "^5.1.5",
+    "@xunlei/vue-context-menu": "^1.0.2",
+    "ant-design-vue": "^2.0.0-beta.9",
+    "axios": "^0.19.2",
+    "js-cookie": "^2.2.1",
+    "lodash": "^4.17.20",
+    "vue": "^3.0.0-beta.1",
+    "vue-router": "^4.0.0-alpha.6",
+    "vue-runtime-helpers": "^1.1.2",
+    "vuex": "^4.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.4.0",
+    "@vue/cli-plugin-router": "~4.4.0",
+    "@vue/cli-plugin-vuex": "~4.4.0",
+    "@vue/cli-service": "~4.4.0",
+    "@vue/compiler-sfc": "^3.0.0-beta.1",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "style-resources-loader": "^1.3.3",
+    "vue-cli-plugin-vue-next": "~0.1.3"
+  }
+}
