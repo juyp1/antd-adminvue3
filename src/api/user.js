@@ -7,3 +7,11 @@ export const signinUser=(data)=>{
     method: 'post'
   })
 }
+
+// 获取权限
+export const getUserInfo=(token)=>{
+  return axios.request({
+    url: `/pc/info?token=${token}`,
+    method: 'get'
+  })
+}

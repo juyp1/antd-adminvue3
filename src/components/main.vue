@@ -1,83 +1,100 @@
 <template>
-<a-layout style="min-height: 100vh">
-  <a-layout-sider>
-    <div class="logo">
-      <img src="../assets/logo.png" alt="">
-    </div>
-    <Menus :routers="routers" :nowpath="state.nownav" @menuclick="handleitem" />
-  </a-layout-sider>
-  <a-layout>
-    <a-layout-header style="background: #fff; padding: 0">
-      <a-row>
-        <a-col :span="21">
-          <div style="padding-left:20px;padding-top:20px">
-            <a-breadcrumb>
-              <a-breadcrumb-item>{{state.nownav.ptitle}}</a-breadcrumb-item>
-              <a-breadcrumb-item v-if="state.nownav.title!='首页'">
-                {{state.nownav.title}}
-              </a-breadcrumb-item>
-              <a-breadcrumb-item v-if="state.nownav.ctitle!=''">{{state.nownav.ctitle}}</a-breadcrumb-item>
-            </a-breadcrumb>
-
-          </div>
-        </a-col>
-        <a-col :span="3">
-          <a-dropdown-button>
-            欢迎你-admin
-            <template v-slot:overlay>
-              <a-menu @click="handleMenuClick">
-                <a-menu-item key="1">
-                  <icon-font type="icon-xiugaimima" />修改密码
-                </a-menu-item>
-                <a-menu-item key="2" @click="loginOut">
-                  <icon-font type="icon-tuichu" />退出登录
-                </a-menu-item>
-              </a-menu>
-            </template>
-            <template v-slot:icon>
-              <UserOutlined />
-            </template>
-          </a-dropdown-button>
-        </a-col>
-      </a-row>
-    </a-layout-header>
-    <a-layout-content style="margin: 15px 16px">
-      <div class="tags-nav">
-        <template v-for="(item,index) in state.navlists">
-          <span>
-
-            <Tags :tageName="item.ctitle!==''?item.ctitle: item.title" @close="handleclose" @mouseover.stop="touchstart" @click.stop="handlechange(item)" @contextmenu.prevent="rightClick(item)" :color="state.nownav.path===item.path?'#2db7f5':''" :index="index" />
-          </span>
-          <div v-if="state.activated" v-bind:style="{  position: 'absolute', zIndex: '99999',left: `${state.clientX-60}px`,top:`${state.clientY-10}px`}">
-            <ul style="list-style: none;">
-              <li>
-                <a-button style="min-width:100px;border:0px !important" type="default" @click="rightclose"> 关闭所有 </a-button>
-              </li>
-              <li>
-                <a-button style="min-width:100px;border:0px !important" type="default" @click="otherclose()"> 关闭其它 </a-button>
-              </li>
-            </ul>
-          </div>
-        </template>
+  <a-layout style="min-height: 100vh">
+    <a-layout-sider>
+      <div class="logo">
+        <img src="../assets/logo.png"
+             alt="">
       </div>
+      <Menus :routers="routers"
+             :nowpath="state.nownav"
+             @menuclick="handleitem" />
+    </a-layout-sider>
+    <a-layout>
+      <a-layout-header style="background: #fff; padding: 0">
+        <a-row>
+          <a-col :span="21">
+            <div style="padding-left:20px;padding-top:20px">
+              <a-breadcrumb>
+                <a-breadcrumb-item>{{state.nownav.ptitle}}</a-breadcrumb-item>
+                <a-breadcrumb-item v-if="state.nownav.title!='首页'">
+                  {{state.nownav.title}}
+                </a-breadcrumb-item>
+                <a-breadcrumb-item v-if="state.nownav.ctitle!=''">{{state.nownav.ctitle}}</a-breadcrumb-item>
+              </a-breadcrumb>
 
-      <div class="content-wrapper container" @click="righthide">
+            </div>
+          </a-col>
+          <a-col :span="3">
+            <a-dropdown-button>
+              欢迎你-admin
+              <template v-slot:overlay>
+                <a-menu @click="handleMenuClick">
+                  <a-menu-item key="1">
+                    <icon-font type="icon-xiugaimima" />修改密码
+                  </a-menu-item>
+                  <a-menu-item key="2"
+                               @click="loginOut">
+                    <icon-font type="icon-tuichu" />退出登录
+                  </a-menu-item>
+                </a-menu>
+              </template>
+              <template v-slot:icon>
+                <UserOutlined />
+              </template>
+            </a-dropdown-button>
+          </a-col>
+        </a-row>
+      </a-layout-header>
+      <a-layout-content style="margin: 15px 16px">
+        <div class="tags-nav">
+          <template v-for="(item,index) in state.navlists">
+            <span>
 
-        <keep-alive :include="cacheList">
-          <router-view />
-        </keep-alive>
-      </div>
-    </a-layout-content>
+              <Tags :tageName="item.ctitle!==''?item.ctitle: item.title"
+                    @close="handleclose"
+                    @mouseover.stop="touchstart"
+                    @click.stop="handlechange(item)"
+                    @contextmenu.prevent="rightClick(item)"
+                    :color="state.nownav.path===item.path?'#2db7f5':''"
+                    :index="index" />
+            </span>
+            <div v-if="state.activated"
+                 v-bind:style="{  position: 'absolute', zIndex: '99999',left: `${state.clientX-60}px`,top:`${state.clientY-10}px`}">
+              <ul style="list-style: none;">
+                <li>
+                  <a-button style="min-width:100px;border:0px !important"
+                            type="default"
+                            @click="rightclose"> 关闭所有 </a-button>
+                </li>
+                <li>
+                  <a-button style="min-width:100px;border:0px !important"
+                            type="default"
+                            @click="otherclose()"> 关闭其它 </a-button>
+                </li>
+              </ul>
+            </div>
+          </template>
+        </div>
+
+        <div class="content-wrapper container"
+             @click="righthide">
+
+          <keep-alive :include="cacheList">
+            <router-view />
+          </keep-alive>
+        </div>
+      </a-layout-content>
+
+    </a-layout>
 
   </a-layout>
-
-</a-layout>
 </template>
 
 <script>
 import _ from 'lodash'
 import config from '../config/index'
 import VueContextMenu from '@xunlei/vue-context-menu'
+import { useStore } from 'vuex'
 import {
   ref,
   onMounted,
@@ -115,7 +132,9 @@ export default {
     MessageFilled,
     Menus
   },
-  setup() {
+  setup () {
+    let store = useStore()
+ 
     const state = reactive({
       clientX: '',
       clientY: '',
@@ -123,7 +142,8 @@ export default {
       nownav: {},
       navlists: [],
       menurouter: [],
-      selectrightpath: ''
+      selectrightpath: '',
+      accesslist:[]
     })
     state.navlists = [{
       path: '/home',
@@ -144,6 +164,7 @@ export default {
     })
 
     onMounted(() => {
+    
       if (localStorage.getItem('nowvalue') != null) {
         state.nownav = JSON.parse(localStorage.getItem('nowvalue'))
       } else {
@@ -160,25 +181,30 @@ export default {
         localStorage.setItem('navs', JSON.stringify(arr))
       }
       let router = _routers.options.routes
-      _turn(router)
+         setTimeout(() => {
+               _turn(router)
+         }, 130);
     })
 
     const _turn = (root) => {
       routers.value = []
       if (!root) return
       // 通过store获取数据
-      let accesslist = ['admin:total', 'admin:order', 'admin:store', 'admin:resource', 'admin:equipment']
+       let  accesslist = store.state.user.userFunc.split(',')
       root.forEach((item, index) => {
         if (!item.meta.hideInMenu) {
           if (item.meta.access != undefined) {
             if (accesslist.indexOf(item.meta.access[0]) < 0) {
-              root.splice(index, 1)
+              // root.splice(index, 1)
+              item.meta.hideInMenu = true
               _turn(item.children)
 
             } else {
+                 
               routers.value.push(item)
             }
           } else {
+          
             routers.value.push(item)
           }
         }
